@@ -13,37 +13,62 @@ export class UploadUserWiseComponent {
   chartOptions: AgCartesianChartOptions = {
     title: {
       text: 'NUMBER OF UPLOADS MONTH WISE',
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: '#4B0082',
     },
     data: [
-      { month: 'Jan', uploads: 10 },
-      { month: 'Feb', uploads: 25 },
-      { month: 'Mar', uploads: 32 },
-      { month: 'Apr', uploads: 10 },
-      { month: 'May', uploads: 28 },
-      { month: 'Jun', uploads: 24 },
-      { month: 'Jul', uploads: 24 },
-      { month: 'Aug', uploads: 26 },
-      { month: 'Sep', uploads: 55 },
-      { month: 'Oct', uploads: 44 },
-      { month: 'Nov', uploads: 45 },
-      { month: 'Dec', uploads: 42 },
+      { month: 'Jan', uploads: 10, shadow: 0 },
+      { month: 'Feb', uploads: 25, shadow: 80 },
+      { month: 'Mar', uploads: 32, shadow: 0 },
+      { month: 'Apr', uploads: 10, shadow: 80 },
+      { month: 'May', uploads: 28, shadow: 0 },
+      { month: 'Jun', uploads: 24, shadow: 80 },
+      { month: 'Jul', uploads: 24, shadow: 0 },
+      { month: 'Aug', uploads: 26, shadow: 80 },
+      { month: 'Sep', uploads: 55, shadow: 0 },
+      { month: 'Oct', uploads: 44, shadow: 80 },
+      { month: 'Nov', uploads: 45, shadow: 0 },
+      { month: 'Dec', uploads: 42, shadow: 80 },
     ],
     series: [
+      // Background bar "shadows"
+      {
+        type: 'bar',
+        xKey: 'month',
+        yKey: 'shadow',
+        fill: '#b4b4b4',
+        fillOpacity: 0.1, // semi-transparent
+        grouped: false,
+        stroke: undefined,
+        highlightStyle: {
+          item: {
+            fill: 'transparent',
+            stroke: 'transparent',
+          },
+        },
+        tooltip: {
+          enabled: false,
+        },
+      },
+      // Actual line chart
       {
         type: 'line',
         xKey: 'month',
         yKey: 'uploads',
         yName: 'Doc Upload',
+        stroke: '#6a5acd',
+        strokeWidth: 2,
         marker: {
           enabled: true,
           size: 6,
+          fill: '#007bff',
+          stroke: '#007bff',
         },
       },
     ],
     background: { fill: '#ffffff' },
-    legend: {
-      position: 'bottom',
-    },
+    legend: { enabled: false },
     axes: [
       {
         type: 'category',

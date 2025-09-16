@@ -1,15 +1,6 @@
 import { Component } from '@angular/core';
 import { AgCharts } from 'ag-charts-angular';
-import {
-  AgBarSeriesOptions,
-  AgCategoryAxisOptions,
-  AgChartCaptionOptions,
-  AgChartLegendOptions,
-  AgChartOptions,
-  AgChartSubtitleOptions,
-  AgLineSeriesOptions,
-  AgNumberAxisOptions,
-} from 'ag-charts-community';
+import { AgBarSeriesOptions } from 'ag-charts-community';
 
 @Component({
   selector: 'app-upload-month-wise',
@@ -60,6 +51,7 @@ export class UploadMonthWiseComponent {
           position: 'bottom',
           title: { text: '' },
           min: 0,
+          max: 150,
           nice: false,
           interval: {
             step: 10,
