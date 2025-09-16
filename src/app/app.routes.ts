@@ -27,4 +27,18 @@ export const routes: Routes = [
         (m) => m.UploadUserWiseComponent
       ),
   },
+  {
+    path: 'geographic-map',
+    loadComponent: () =>
+      import('./components/geographic-map/geographic-map.component').then(
+        (m) => m.GeographicMapComponent
+      ),
+  },
+  {
+    path: 'heat-map',
+    loadComponent: () =>
+      import('./components/heat-map/heat-map.component').then(
+        (m) => m.HeatMapComponent
+      ),
+  },
 ];
