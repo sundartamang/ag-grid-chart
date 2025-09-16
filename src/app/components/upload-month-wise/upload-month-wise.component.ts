@@ -50,8 +50,21 @@ export class UploadMonthWiseComponent {
         } as AgBarSeriesOptions,
       ],
       axes: [
-        { type: 'category', position: 'left', title: { text: 'Username' } },
-        { type: 'number', position: 'bottom', title: { text: '' } },
+        {
+          type: 'category',
+          position: 'left',
+          title: { text: 'Username' },
+        },
+        {
+          type: 'number',
+          position: 'bottom',
+          title: { text: '' },
+          min: 0,
+          nice: false,
+          interval: {
+            step: 10,
+          },
+        },
       ] as any[],
       legend: { enabled: false },
     };
