@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AgCartesianChartOptions } from 'ag-charts-community';
 import { AgCharts } from 'ag-charts-angular';
+import { documentData } from './data';
 
 @Component({
   selector: 'app-document-type-wise',
@@ -23,15 +24,7 @@ export class DocumentTypeWiseComponent {
       bottom: 50,
       left: 50,
     },
-    data: [
-      { docType: 'All Reports & Publications', count: 10 },
-      { docType: 'Annual therapy Update', count: 14 },
-      { docType: 'Transmittals', count: 65 },
-      { docType: 'HCPCS Quarterly Update', count: 28 },
-      { docType: 'LCD', count: 43 },
-      { docType: 'ICD 10', count: 56 },
-      { docType: 'OCE Edit 37', count: 42 },
-    ],
+    data: documentData,
     series: [
       {
         type: 'line',
@@ -39,8 +32,12 @@ export class DocumentTypeWiseComponent {
         yKey: 'count',
         marker: { enabled: true, size: 6, shape: 'circle' },
         tooltip: {
-          renderer: ({ datum }: { datum: any }) =>
-            `Doc Upload: <b>${datum.count}</b><br/>Doc Type: <b>${datum.docType}</b>`,
+          renderer: ({ datum }: { datum: any }) => {
+            return `<div style="padding:5px; border-radius:4px; background:#fff; color:#333; box-shadow:0 2px 6px rgba(0,0,0,0.15)">
+              Doc Upload: <b>${datum.count}</b><br/>
+              Doc Type: <b>${datum.docType}</b>
+            </div>`;
+          },
         },
         stroke: '#6a5acd',
       },
@@ -49,7 +46,13 @@ export class DocumentTypeWiseComponent {
       {
         type: 'category',
         position: 'bottom',
-        label: { rotation: 0 },
+        label: {
+          rotation: 0,
+          formatter: (params: { value: string }) => {
+            const val = params.value ?? '';
+            return val.length > 7 ? val.substring(0, 7) + '…' : val;
+          },
+        },
         gridLine: {
           style: [
             {},
@@ -70,7 +73,6 @@ export class DocumentTypeWiseComponent {
         position: 'left',
         title: { text: 'COUNT OF doc_compare_ID' },
         min: 0,
-        max: 80,
         nice: false,
         interval: {
           step: 10,

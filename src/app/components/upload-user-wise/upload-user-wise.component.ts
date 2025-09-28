@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { AgCartesianChartOptions } from 'ag-charts-community';
+import { AgAxisLabelFormatterParams } from 'ag-charts-community';
 import { AgCharts } from 'ag-charts-angular';
+import { documentData } from './data';
 
 @Component({
   selector: 'app-upload-user-wise',
@@ -10,82 +11,124 @@ import { AgCharts } from 'ag-charts-angular';
   styleUrl: './upload-user-wise.component.scss',
 })
 export class UploadUserWiseComponent {
-  chartOptions: AgCartesianChartOptions = {
-    title: {
-      text: 'NUMBER OF UPLOADS MONTH WISE',
-      fontSize: 16,
-      fontWeight: 'bold',
-      color: '#4B0082',
-    },
-    data: [
-      { month: 'Jan', uploads: 10, shadow: 0 },
-      { month: 'Feb', uploads: 25, shadow: 80 },
-      { month: 'Mar', uploads: 32, shadow: 0 },
-      { month: 'Apr', uploads: 10, shadow: 80 },
-      { month: 'May', uploads: 28, shadow: 0 },
-      { month: 'Jun', uploads: 24, shadow: 80 },
-      { month: 'Jul', uploads: 24, shadow: 0 },
-      { month: 'Aug', uploads: 26, shadow: 80 },
-      { month: 'Sep', uploads: 55, shadow: 0 },
-      { month: 'Oct', uploads: 44, shadow: 80 },
-      { month: 'Nov', uploads: 45, shadow: 0 },
-      { month: 'Dec', uploads: 42, shadow: 80 },
-    ],
-    series: [
-      // Background bar "shadows"
-      {
-        type: 'bar',
-        xKey: 'month',
-        yKey: 'shadow',
-        fill: '#b4b4b4',
-        fillOpacity: 0.1, // semi-transparent
-        grouped: false,
-        stroke: undefined,
-        highlightStyle: {
-          item: {
-            fill: 'transparent',
-            stroke: 'transparent',
+  data: any[] = [];
+  chartOptions: any;
+
+  constructor() {
+    this.data = this.buildDataforChart();
+    console.log(this.data);
+    this.initializeChart();
+  }
+
+  private initializeChart() {
+    this.chartOptions = {
+      title: {
+        text: 'NUMBER OF DOCUMENT UPLOADS',
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#4B0082',
+      },
+      data: this.data,
+      series: [
+        // Background shadow bars
+        {
+          type: 'bar',
+          xKey: 'document_type',
+          yKey: 'shadow',
+          fill: '#b4b4b4',
+          fillOpacity: 0.1,
+          grouped: false,
+          stroke: undefined,
+          highlightStyle: {
+            item: {
+              fill: '',
+              stroke: 'transparent',
+            },
           },
+          zIndex: 0,
+          tooltip: { enabled: false },
+          pinned: 'left',
         },
-        tooltip: {
-          enabled: false,
+        // Line chart for actual counts
+        {
+          type: 'line',
+          xKey: 'document_type',
+          yKey: 'count',
+          yName: 'Doc Upload',
+          stroke: '#6a5acd',
+          strokeWidth: 2,
+          marker: {
+            enabled: true,
+            size: 6,
+            fill: '#007bff',
+            stroke: '#007bff',
+            strokeWidth: 1,
+            maxSize: 20,
+          },
+          tooltip: {
+            range: 'exact',
+            renderer: ({ datum }: any) => {
+              return {
+                content: `${datum['document_type']}: ${datum['count']}`,
+              };
+            },
+          },
+          zIndex: 1,
         },
-      },
-      // Actual line chart
-      {
-        type: 'line',
-        xKey: 'month',
-        yKey: 'uploads',
-        yName: 'Doc Upload',
-        stroke: '#6a5acd',
-        strokeWidth: 2,
-        marker: {
+      ],
+      background: { fill: '#ffffff' },
+      legend: { enabled: false },
+      axes: [
+        {
+          type: 'category',
+          position: 'bottom',
+          title: { text: 'Document Type' },
+          label: {
+            // avoidCollisions: false,
+            // minSpacing: 20,
+            wrapping: 'never',
+            truncate: true,
+            autoRotate: false,
+            // formatter: ({ value }: AgAxisLabelFormatterParams) =>
+            //   String(value).length > 15
+            //     ? String(value).slice(0, 12) + '…'
+            //     : String(value),
+          },
+          paddingInner: 0,
+          paddingOuter: 0,
+        },
+        {
+          type: 'number',
+          position: 'left',
+          title: { text: 'COUNT OF DOCUMENTS' },
+          min: 0,
+          max: this.getMaxCountFromData(),
+          nice: true,
+        },
+      ],
+
+      overlay: {
+        noData: {
           enabled: true,
-          size: 6,
-          fill: '#007bff',
-          stroke: '#007bff',
+          text: 'No document data available',
+          fontSize: 14,
+          fontWeight: 'bold',
+          color: '#666666',
         },
       },
-    ],
-    background: { fill: '#ffffff' },
-    legend: { enabled: false },
-    axes: [
-      {
-        type: 'category',
-        position: 'bottom',
-        title: { text: '' },
-      },
-      {
-        type: 'number',
-        position: 'left',
-        title: { text: 'COUNT OF doc_compare_ID' },
-        min: 0,
-        max: 80,
-        nice: false,
-        interval: {
-          step: 10,
-        },
-      },
-    ],
-  };
+    };
+  }
+
+  private buildDataforChart() {
+    const maxCount = this.getMaxCountFromData();
+    return documentData.map((d, index) => ({
+      document_type: d.document_type,
+      count: d.count,
+      shadow: index % 2 === 1 ? maxCount : 0,
+    }));
+  }
+
+  private getMaxCountFromData(): number {
+    return Math.max(...documentData.map((d) => d.count));
+  }
 }

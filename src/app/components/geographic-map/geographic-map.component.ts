@@ -3,6 +3,7 @@ import { AgCharts } from 'ag-charts-angular';
 import { AgChartOptions } from 'ag-charts-enterprise';
 import { central, eastern, mountain, pacific } from './data';
 import { topology } from './topology';
+import 'ag-charts-enterprise';
 
 @Component({
   selector: 'app-geographic-map',
