@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { AgAxisLabelFormatterParams } from 'ag-charts-community';
 import { AgCharts } from 'ag-charts-angular';
 import { documentData } from './data';
 
@@ -11,12 +10,9 @@ import { documentData } from './data';
   styleUrl: './upload-user-wise.component.scss',
 })
 export class UploadUserWiseComponent {
-  data: any[] = [];
   chartOptions: any;
 
   constructor() {
-    this.data = this.buildDataforChart();
-    console.log(this.data);
     this.initializeChart();
   }
 
@@ -28,7 +24,7 @@ export class UploadUserWiseComponent {
         fontWeight: 'bold',
         color: '#4B0082',
       },
-      data: this.data,
+      data: this.buildDataforChart(),
       series: [
         // Background shadow bars
         {
@@ -84,9 +80,8 @@ export class UploadUserWiseComponent {
           position: 'bottom',
           title: { text: 'Document Type' },
           label: {
-            // avoidCollisions: false,
-            // minSpacing: 20,
-            wrapping: 'never',
+            wrapping: 'wrap',
+            wordWrap: 'break-word',
             truncate: true,
             autoRotate: false,
             // formatter: ({ value }: AgAxisLabelFormatterParams) =>
@@ -110,7 +105,7 @@ export class UploadUserWiseComponent {
       overlay: {
         noData: {
           enabled: true,
-          text: 'No document data available',
+          text: 'No data available',
           fontSize: 14,
           fontWeight: 'bold',
           color: '#666666',
